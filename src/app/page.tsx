@@ -1,101 +1,175 @@
-import Image from "next/image";
 
-export default function Home() {
+"use client"
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
+import React from "react";
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+
+import { Lock, ChevronRight } from "lucide-react";
+import { toast } from "sonner";
+import JobMainAnalysis from "./Components/JobMainAnalysis";
+import MainTabs from "./Components/MainTabs";
+
+interface JobApplication {
+  id: string;
+  companyName: string;
+  jobTitle: string;
+  applicationDate: Date;
+  status: "Applied" | "Interview" | "Offer" | "Rejected";
+}
+
+interface Interview {
+  id: string;
+  companyName: string;
+  jobTitle: string;
+  date: Date;
+  time: string;
+}
+
+export default function page() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [jobApplications, setJobApplications] = useState<JobApplication[]>([
+    {
+      id: "1",
+      companyName: "TechCorp",
+      jobTitle: "Frontend Developer",
+      applicationDate: new Date(2024, 0, 15),
+      status: "Interview",
+    },
+    {
+      id: "2",
+      companyName: "DataSystems",
+      jobTitle: "Data Analyst",
+      applicationDate: new Date(2024, 0, 20),
+      status: "Applied",
+    },
+    {
+      id: "3",
+      companyName: "CloudNet",
+      jobTitle: "DevOps Engineer",
+      applicationDate: new Date(2024, 0, 25),
+      status: "Rejected",
+    },
+    {
+      id: "4",
+      companyName: "AI Innovations",
+      jobTitle: "Machine Learning Engineer",
+      applicationDate: new Date(2024, 1, 1),
+      status: "Offer",
+    },
+  ]);
+
+  const [interviews, setInterviews] = useState<Interview[]>([
+    {
+      id: "1",
+      companyName: "TechCorp",
+      jobTitle: "Frontend Developer",
+      date: addDays(new Date(), 2),
+      time: "10:00 AM",
+    },
+    {
+      id: "2",
+      companyName: "AI Innovations",
+      jobTitle: "Machine Learning Engineer",
+      date: addDays(new Date(), 5),
+      time: "2:00 PM",
+    },
+  ]);
+
+  const applicationStatusData = [
+    {
+      name: "Applied",
+      value: jobApplications.filter((job) => job.status === "Applied").length,
+      color: "#3b82f6",
+    },
+    {
+      name: "Interview",
+      value: jobApplications.filter((job) => job.status === "Interview").length,
+      color: "#10b981",
+    },
+    {
+      name: "Offer",
+      value: jobApplications.filter((job) => job.status === "Offer").length,
+      color: "#f59e0b",
+    },
+    {
+      name: "Rejected",
+      value: jobApplications.filter((job) => job.status === "Rejected").length,
+      color: "#ef4444",
+    },
+  ];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="bg-blue-200 min-h-screen p-4 ">
+      <div className="bg-green-100 max-w-7xl mx-auto space-y-8 p-2">
+        <div className="bg-gray-300 p-2 flex justify-between items-center">
+          <div>
+            <h1 className="mt-2 font-bold text-3xl text-gray-900">
+              Job Tracker Dashboard
+            </h1>
+            <p className="mt-2 text-gray-600 mb-2">
+              Track your job search journey and stay motivated!
+            </p>
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  <Avatar className="h-8 w-8 mr-2">
+                    <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  John Doe
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">John Doe</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      john.doe@example.com
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Lock className="mr-2 h-4 w-4" />
+                  <span>Privacy Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div>
+          <JobMainAnalysis 
+            jobApplications={jobApplications} 
+            interviews={interviews} 
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+        <div><MainTabs /></div>
+        <div>page</div>
+        <div>page</div>
+      </div>
     </div>
   );
+}
+
+// Function to add days to a date
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }
