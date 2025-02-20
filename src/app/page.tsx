@@ -20,6 +20,8 @@ import { Lock, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import JobMainAnalysis from "./Components/JobMainAnalysis";
 import MainTabs from "./Components/MainTabs";
+import Resource from "./Components/Resource";
+import Footer from "./Components/Footer";
 
 interface JobApplication {
   id: string;
@@ -111,16 +113,13 @@ export default function page() {
   ];
 
   return (
-    <div className="bg-blue-200 min-h-screen p-4 ">
-      <div className="bg-green-100 max-w-7xl mx-auto space-y-8 p-2">
-        <div className="bg-gray-300 p-2 flex justify-between items-center">
-          <div>
-            <h1 className="mt-2 font-bold text-3xl text-gray-900">
-              Job Tracker Dashboard
+    <div className="bg-[#f9fafd] min-h-screen p-4 ">
+      <div className="max-w-7xl mx-auto space-y-8 p-2">
+        <div className="p-2 flex justify-between items-center ">
+          <div className="">
+            <h1 className="mt-2 font-bold h1 text-3xl text-gray-900">
+              Job Tracker
             </h1>
-            <p className="mt-2 text-gray-600 mb-2">
-              Track your job search journey and stay motivated!
-            </p>
           </div>
           <div>
             <DropdownMenu>
@@ -160,8 +159,8 @@ export default function page() {
           />
         </div>
         <div><MainTabs /></div>
-        <div>page</div>
-        <div>page</div>
+        <div><Resource /></div>
+        <div><Footer /></div>
       </div>
     </div>
   );

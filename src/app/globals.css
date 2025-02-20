@@ -70,3 +70,54 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.background-color {
+  @apply bg-[#f9fafd]
+}
+
+.text-color {
+  @apply text-[#070c15]
+}
+
+.primary-color {
+  @apply bg-[#4a80c5]
+}
+
+.secondary-color {
+  @apply bg-[#c894dd]
+}
+
+
+.accent-color {
+  @apply bg-[#d170c6]
+}
+
+
+
+
+@import url('https://fonts.googleapis.com/css?family=DM%20Serif%20Display:700|Inter%20Tight:400');
+
+body {
+  font-family: 'Inter Tight';
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'DM Serif Display';
+  font-weight: 700;
+}
+
+html {font-size: 100%;} /* 16px */
+
+h1 {font-size: 4.210rem; /* 67.36px */}
+
+h2 {font-size: 3.158rem; /* 50.56px */}
+
+h3 {font-size: 2.369rem; /* 37.92px */}
+
+h4 {font-size: 1.777rem; /* 28.48px */}
+
+h5 {font-size: 1.333rem; /* 21.28px */}
+
+small {font-size: 0.750rem; /* 12px */}

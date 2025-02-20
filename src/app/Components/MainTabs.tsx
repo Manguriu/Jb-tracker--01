@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,69 +11,20 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  ChartContainer,
-  ChartTooltipContent,
-  ChartTooltip,
-} from "@/components/ui/chart";
 import { motion } from "framer-motion";
-
-const addJobApplication = () => {
-  console.log("Add job application clicked");
-};
-const scheduleInterview = () => {
-  console.log("Schedule interview clicked");
-};
-
-const jobApplications = [
-  {
-    id: 1,
-    jobTitle: "Frontend Developer",
-    companyName: "Tech Corp",
-    applicationDate: new Date(),
-    status: "Applied",
-  },
-  {
-    id: 2,
-    jobTitle: "Backend Developer",
-    companyName: "Code Inc",
-    applicationDate: new Date(),
-    status: "Interview",
-  },
-  {
-    id: 3,
-    jobTitle: "Backend Developer",
-    companyName: " Inc",
-    applicationDate: new Date(),
-    status: "Rejected",
-  },
-  {
-    id: 4,
-    jobTitle: "Backend Developer",
-    companyName: " Inc",
-    applicationDate: new Date(),
-    status: "Offer",
-  },
-];
-
-const interviews = [
-  {
-    id: 1,
-    companyName: "Tech Corp",
-    jobTitle: "Frontend Developer",
-    date: new Date(),
-    time: "10:00 AM",
-  },
-];
-
-const applicationStatusData = [
-  { name: "Applied", value: 5 },
-  { name: "Interview", value: 3 },
-  { name: "Offer", value: 1 },
-  { name: "Rejected", value: 2 },
-];
+import { jobApplications } from "../constants";
+import { interviews } from "../constants";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { v4 as uuidv4 } from "uuid";
 
 // Helper function for formatting dates
 const formatDate = (date: Date) => {
@@ -85,6 +36,69 @@ const formatDate = (date: Date) => {
 };
 
 export default function MainTabs() {
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const [isInterviewModalOpen, setIsInterviewModalOpen] = useState(false);
+  const [applicationFormData, setApplicationFormData] = useState({
+    id: "uuidv4()",
+    jobTitle: "",
+    companyName: "",
+    status: "",
+    applicationDate: new Date().toISOString().split("T")[0],
+  });
+  const [interviewFormData, setInterviewFormData] = useState({
+    id: "uuidv4()",
+    companyName: "",
+    jobTitle: "",
+    interviewDate: new Date().toISOString().split("T")[0],
+    time: "",
+  });
+
+  const openApplicationModal = () => setIsApplicationModalOpen(true);
+  const closeApplicationModal = () => setIsApplicationModalOpen(false);
+  const openInterviewModal = () => setIsInterviewModalOpen(true);
+  const closeInterviewModal = () => setIsInterviewModalOpen(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleApplicationChange = (e: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    target: { name: any; value: any };
+  }) => {
+    setApplicationFormData({
+      ...applicationFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleInterviewChange = (e: { target: { name: any; value: any } }) => {
+    setInterviewFormData({
+      ...interviewFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleApplicationSubmit = () => {
+    if (!applicationFormData.jobTitle || !applicationFormData.companyName) {
+      alert("Please fill in all fields");
+      return;
+    }
+    console.log("New Application:", { ...applicationFormData, id: uuidv4() });
+    closeApplicationModal();
+  };
+
+  const handleInterviewSubmit = () => {
+    if (
+      !interviewFormData.companyName ||
+      !interviewFormData.jobTitle ||
+      !interviewFormData.time
+    ) {
+      alert("Please fill in all fields");
+      return;
+    }
+    console.log("New Interview:", { ...interviewFormData, id: uuidv4() });
+    closeInterviewModal();
+  };
+
   const motionVariants = {
     initial: { opacity: 0, x: -50 },
     animate: { opacity: 1, x: 0 },
@@ -94,10 +108,14 @@ export default function MainTabs() {
   return (
     <div>
       <Tabs defaultValue="applications" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="applications">Applications</TabsTrigger>
-          <TabsTrigger value="interviews">Interviews</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsList className="primary-color">
+          <TabsTrigger value="applications" className="text-[#070c15]">
+            Applications
+          </TabsTrigger>
+          <TabsTrigger value="interviews" className="text-[#070c15]">
+            Interviews
+          </TabsTrigger>
+          {/* <TabsTrigger value="analytics">Analytics</TabsTrigger> */}
         </TabsList>
         <TabsContent value="applications" className="space-y-4">
           <motion.div
@@ -108,17 +126,21 @@ export default function MainTabs() {
             exit="exit"
             transition={{ duration: 0.3 }}
           >
-            <div className="flex justify-between items-center mb-5">
-              <h2 className="text-2xl font-bold">Recent Applications</h2>
-              <Button onClick={addJobApplication} >
+            <div className="flex justify-between items-center mb-5 ">
+              <h2 className="text-2xl text-[#070c15] font-bold">
+                Recent Applications
+              </h2>
+              <Button onClick={openApplicationModal} className="primary-color">
                 <Plus className="mr-2 h-4 w-4" /> Add Application
               </Button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {jobApplications.map((job) => (
-                <Card key={job.id}>
+                <Card key={job.id} className="">
                   <CardHeader>
-                    <CardTitle>{job.jobTitle}</CardTitle>
+                    <CardTitle className="text-[#070c15]">
+                      {job.jobTitle}
+                    </CardTitle>
                     <CardDescription>{job.companyName}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -143,7 +165,9 @@ export default function MainTabs() {
                     >
                       {job.status}
                     </Badge>
-                    <Button variant="ghost">View Details</Button>
+                    <Button variant="ghost" className="text-[#070c15]">
+                      View Details
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
@@ -160,8 +184,10 @@ export default function MainTabs() {
             transition={{ duration: 0.3 }}
           >
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Upcoming Interviews</h2>
-              <Button onClick={scheduleInterview}>
+              <h2 className="text-2xl font-bold text-[#070c15]">
+                Upcoming Interviews
+              </h2>
+              <Button onClick={openInterviewModal}>
                 <Plus className="mr-2 h-4 w-4" /> Schedule Interview
               </Button>
             </div>
@@ -211,88 +237,76 @@ export default function MainTabs() {
             </div>
           </motion.div>
         </TabsContent>
-        <TabsContent value="analytics" className="space-y-4">
-          <motion.div
-            key="analytics"
-            variants={motionVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-          >
-            <h2 className="text-2xl font-bold">Application Analytics</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Application Status</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ChartContainer
-                    config={{
-                      applied: { label: "Applied", color: "blue" },
-                      interview: { label: "Interview", color: "green" },
-                      offer: { label: "Offer", color: "yellow" },
-                      rejected: { label: "Rejected", color: "red" },
-                    }}
-                    className="h-[300px]"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={applicationStatusData}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {applicationStatusData.map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={
-                                entry.name === "Applied"
-                                  ? "#3b82f6" // Tailwind `blue-500`
-                                  : entry.name === "Interview"
-                                  ? "#22c55e" // Tailwind `green-500`
-                                  : entry.name === "Offer"
-                                  ? "#facc15" // Tailwind `yellow-500`
-                                  : "#ef4444" // Tailwind `red-500`
-                              }
-                            />
-                          ))}
-                        </Pie>
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Application Insights</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-4">
-                    <li className="flex items-center justify-between">
-                      <span>Average Response Time</span>
-                      <span className="font-medium">5 days</span>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span>Most Applied Job Title</span>
-                      <span className="font-medium">Frontend Developer</span>
-                    </li>
-                    <li className="flex items-center justify-between">
-                      <span>Top Application Source</span>
-                      <span className="font-medium">LinkedIn</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          </motion.div>
-        </TabsContent>
       </Tabs>
+      
+{/* // Application Modal  */}
+      <Dialog open={isApplicationModalOpen} onOpenChange={setIsApplicationModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Job Application</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Label>Job Title</Label>
+            <Input name="jobTitle" value={applicationFormData.jobTitle} onChange={handleApplicationChange} />
+            <Label>Company Name</Label>
+            <Input name="companyName" value={applicationFormData.companyName} onChange={handleApplicationChange} />
+            <Label>Application Date</Label>
+            <Input type="date" name="applicationDate" value={applicationFormData.applicationDate} onChange={handleApplicationChange} />
+          </div>
+          <DialogFooter>
+          <Badge variant="default" className="bg-blue-100 text-blue-500">Applied</Badge>
+            <Button onClick={closeApplicationModal} variant="ghost">Cancel</Button>
+            <Button onClick={handleApplicationSubmit}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+
+      {/* Interview Modal */}
+      <Dialog
+        open={isInterviewModalOpen}
+        onOpenChange={setIsInterviewModalOpen}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Schedule Interview</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Label>Company Name</Label>
+            <Input
+              name="companyName"
+              value={interviewFormData.companyName}
+              onChange={handleInterviewChange}
+            />
+            <Label>Job Title</Label>
+            <Input
+              name="jobTitle"
+              value={interviewFormData.jobTitle}
+              onChange={handleInterviewChange}
+            />
+            <Label>Interview Date</Label>
+            <Input
+              type="date"
+              name="interviewDate"
+              value={interviewFormData.interviewDate}
+              onChange={handleInterviewChange}
+            />
+            <Label>Time</Label>
+            <Input
+              type="time"
+              name="time"
+              value={interviewFormData.time}
+              onChange={handleInterviewChange}
+            />
+          </div>
+          <DialogFooter>
+            <Button onClick={closeInterviewModal} variant="ghost">
+              Cancel
+            </Button>
+            <Button onClick={handleInterviewSubmit}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
