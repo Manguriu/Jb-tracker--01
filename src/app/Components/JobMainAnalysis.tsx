@@ -86,7 +86,7 @@ export default function JobMainAnalysis({
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 ">
-      <Card className="secondary-color">
+      <Card className="bg-gradient-to-r from-[#d170c6] via-[#c894dd] to-[#4a80c5]">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             Total Applications
@@ -100,11 +100,11 @@ export default function JobMainAnalysis({
           </p>
           <Progress
             value={(applicationsThisWeek / totalApplications) * 100}
-            className="mt-2"
+            className="mt-2 bg-slate-200" 
           />
         </CardContent>
       </Card>
-      <Card className="secondary-color">
+      <Card className="bg-gradient-to-r from-[#d170c6] via-[#c894dd] to-[#4a80c5]">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
           <BarChart className="h-4 w-4 text-muted-foreground" />
@@ -114,10 +114,10 @@ export default function JobMainAnalysis({
           <p className="text-xs text-muted-foreground">
             {successfulApplications} successful applications
           </p>
-          <Progress value={successRate} className="mt-2" />
+          <Progress value={successRate} className="mt-2 bg-slate-200" />
         </CardContent>
       </Card>
-      <Card className="secondary-color">
+      <Card className="bg-gradient-to-r from-[#d170c6] via-[#c894dd] to-[#4a80c5]">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             Upcoming Interviews
@@ -138,7 +138,7 @@ export default function JobMainAnalysis({
           )}
         </CardContent>
       </Card>
-      <Card className="secondary-color">
+      <Card className="bg-gradient-to-r from-[#d170c6] via-[#c894dd] to-[#4a80c5]">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
             Application Streak
@@ -150,7 +150,7 @@ export default function JobMainAnalysis({
           <p className="text-xs text-muted-foreground">
             {streak > 0 ? "Keep it up!" : "Start a new streak today!"}
           </p>
-          <Progress value={streak * 10} className="mt-2" />
+          <Progress value={streak * 10} className="mt-2 bg-slate-200" />
         </CardContent>
       </Card>
     </div>

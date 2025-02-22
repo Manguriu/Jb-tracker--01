@@ -29,6 +29,42 @@ export const jobApplications = [
     applicationDate: subDays(new Date(), 3),
     status: "Offer",
   },
+
+  {
+    id: 5,
+    jobTitle: "Frontend Developer",
+    companyName: "Tech Corp",
+    applicationDate: new Date(),
+    status: "Offer",
+  },
+  {
+    id: 6,
+    jobTitle: "Frontend Developer",
+    companyName: "Tech Corp",
+    applicationDate: new Date(),
+    status: "Applied",
+  },
+  {
+    id: 7,
+    jobTitle: "Frontend Developer",
+    companyName: "Tech Corp",
+    applicationDate: new Date(),
+    status: "Applied",
+  },
+  {
+    id: 8,
+    jobTitle: "Frontend Developer",
+    companyName: "Tech Corp",
+    applicationDate: new Date(),
+    status: "Applied",
+  },
+  {
+    id: 9,
+    jobTitle: "Frontend Developer",
+    companyName: "Tech Corp",
+    applicationDate: new Date(),
+    status: "Offer",
+  },
 ];
 
 export const interviews = [

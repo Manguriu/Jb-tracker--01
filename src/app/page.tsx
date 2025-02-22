@@ -113,7 +113,7 @@ export default function page() {
   ];
 
   return (
-    <div className="bg-[#f9fafd] min-h-screen p-4 ">
+    <div className="bg-[#ffff] min-h-screen p-4 ">
       <div className="max-w-7xl mx-auto space-y-8 p-2">
         <div className="p-2 flex justify-between items-center ">
           <div className="">
